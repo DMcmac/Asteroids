@@ -46,6 +46,13 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+        for a in asteroids:
+            for s in shots:
+                if s.collides_with(a):
+                    log_event("asteroid_shot")
+                    a.split()
+                    s.kill()
+
         dt = refresh_clock.tick(60) / 1000
         
 
