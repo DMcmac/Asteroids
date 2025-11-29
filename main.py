@@ -1,8 +1,11 @@
 import pygame
+import sys
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from logger import log_state
+from logger import log_state, log_event
 from player import Player
-
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from circleshape import CircleShape
 
 
 
@@ -19,7 +22,11 @@ def main():
     dt = 0
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
     Player.containers = (updatable, drawable)
+    Asteroid.containers = (updatable, drawable, asteroids)
+    AsteroidField.containers = (updatable)
+    Warp_belt = AsteroidField()
     danigan = Player(x= SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2)
     while True:
         log_state()
@@ -31,6 +38,11 @@ def main():
             obj.draw(screen)
         updatable.update(dt)
         pygame.display.flip()
+        for a in asteroids:
+            if a.collides_with(danigan):
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
         dt = refresh_clock.tick(60) / 1000
         
 
